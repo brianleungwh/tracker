@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 8000, host: 8080
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -42,15 +42,14 @@ Vagrant.configure("2") do |config|
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
-  #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
-  #
+  
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "tracker_vm"
+  
+    # Customize the amount of memory on the VM:
+    vb.memory = "1024"
+  end
+  
   # View the documentation for the provider you are using for more
   # information on available options.
 
@@ -61,9 +60,10 @@ Vagrant.configure("2") do |config|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
 
-  # Docker and Docker Compose provision
+  # Docker provision
   config.vm.provision :docker
   config.vm.provision :docker_compose
+
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
