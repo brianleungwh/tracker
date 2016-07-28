@@ -9,7 +9,8 @@ import scrapy
 
 
 class CraigslistItem(scrapy.Item):
+    craig_id = scrapy.Field()
     title = scrapy.Field()
-    created_at = scrapy.Field()
+    last_modified_at = scrapy.Field()
     price = scrapy.Field()
-    url = scrapy.Field()
+    absolute_url = scrapy.Field()
