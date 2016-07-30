@@ -1,5 +1,7 @@
 import scrapy
 from scrapy.loader import ItemLoader
+from scrapy.utils.url import urljoin_rfc
+from scrapy.utils.response import get_base_url
 from core_listing_scraper.items import CraigslistItem
 
 CRAIGSLIST_PAGINATION_LIMIT = 24
@@ -9,9 +11,9 @@ TEST_URL = 'http://losangeles.craigslist.org/search/cta?query=135i&auto_transmis
 class ListingSpider(scrapy.Spider):
     name = 'listing_spider'
 
-    def __init__(self, results_page_url=):
+    def __init__(self, results_page_url=TEST_URL):
         super(ListingSpider, self).__init__()
-        self.start_urls = self._build_start_urls(results_page_url=TEST_URL)
+        self.start_urls = self._build_start_urls(results_page_url)
         self.hostname = results_page_url.split('search')[0][:-1]
         
     @staticmethod
@@ -33,12 +35,17 @@ class ListingSpider(scrapy.Spider):
         # // elects nodes in the document from the current node that match the selection no matter where they are
         for listing in listings:
             item = CraigslistItem()
-            self.make_item(listing, item)
+            self.make_item(response, listing, item)
             yield item
 
-    def make_item(self, listing, item):
+    @staticmethod
+    def get_absolute_url(response, relative_url):
+        return urljoin_rfc(get_base_url(response), relative_url)
+
+    def make_item(self, response, listing, item):
         item['craig_id'] = listing.xpath("@data-pid").extract_first()
-        item['absolute_url'] = self.hostname + listing.xpath("a/@href").extract_first()
+        a_href_link = listing.xpath("a/@href").extract_first()
+        item['absolute_url'] = self.get_absolute_url(response, a_href_link)
         listing_info = listing.xpath("span[@class='txt']")
         item['last_modified_at'] = listing_info.xpath("span[@class='pl']/time/@datetime").extract_first()
         title_tag = listing_info.xpath("span[@class='pl']/a/span[@id='titletextonly']")
