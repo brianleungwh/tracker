@@ -68,6 +68,14 @@ ITEM_PIPELINES = {
    'core_listing_scraper.pipelines.CoreListingScraperPipeline': 300,
 }
 
+# Instruct the scrapy module core_listing_scraper about the tracker Django app
+# References:
+# http://sparkanswers.com/integrate-scrapy-with-django-framework/
+# https://github.com/erroneousboat/docker-django
+import sys, os
+sys.path.append('/code/') # path in the docker env
+os.environ['DJANGO_SETTINGS_MODULE'] = 'tracker.settings.base'
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
