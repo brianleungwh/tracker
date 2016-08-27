@@ -1,13 +1,25 @@
 version: '2'
 services:
   db:
-    image: postgres
+    restart: always
+    image: postgres:9.5.2
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    env_file:
+      - ./env/development.env
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000 --settings=tracker.settings.dev
     volumes:
       - .:/code
     ports:
       - "8000:8000"
     links:
       - db
+    env_file:
+      - ./env/development.env
+volumes:
+  pgdata:
+    driver: local
