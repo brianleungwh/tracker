@@ -48,7 +48,7 @@ class ListingSpider(scrapy.Spider):
         item['absolute_url'] = self.get_absolute_url(response, a_href_link)
         listing_info = listing.xpath("span[@class='txt']")
         item['last_modified_at'] = listing_info.xpath("span[@class='pl']/time/@datetime").extract_first()
-        title_tag = listing_info.xpath("span[@class='pl']/a/span[@id='titletextonly']")
+        title_tag = listing_info.xpath("span[@class='pl']/a")
         item['title'] = title_tag.xpath("text()").extract_first()
         price_tag = listing_info.xpath("span[@class='l2']/span[@class='price']")
         item['price'] = price_tag.xpath("text()").extract_first()
