@@ -7,6 +7,8 @@
 
 
 class CoreListingScraperPipeline(object):
+
     def process_item(self, item, spider):
-        print('pipeline called')
+        # print('process_item called')
+        print(item)
         return item
