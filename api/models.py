@@ -6,6 +6,9 @@ from django.db import models
 class User(models.Model):
     email = models.EmailField(primary_key=True)
 
+    def __unicode__(self):
+        return self.email
+
 
 class Tracker(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
