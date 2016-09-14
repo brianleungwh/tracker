@@ -2,6 +2,16 @@ from rest_framework import serializers
 from api.models import User, Tracker
 from urlparse import urlparse
 
+from core_listing_scraper.utils import *
+from core_listing_scraper.spiders.listing_spider import ListingSpider
+from core_listing_scraper.pipelines import DATA_FILE
+
+import subprocess
+import pandas as pd
+
+PYTHON = 'python'
+MAIN_SCRAPY_SCRIPT = 'core_listing_scraper/scrape_to_file.py'
+
 class UserTrackerSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     result_page_url = serializers.URLField(required=True, max_length=500)
@@ -29,14 +39,26 @@ class UserTrackerSerializer(serializers.Serializer):
 
     def create_tracker(self):
         email, result_page_url = self.extract_validated_data()
-        user = User.objects.get_or_create(email=email)
+        user, created = User.objects.get_or_create(email=email)
         user.save()
-        # initialize tracker with scrapy app?
-        # send initial email with current listings
         # return 201
-        tracker = Tracker(user=user, result_page_url=result_page_url, listings=JSON_DATA)
+        subprocess.call([PYTHON, MAIN_SCRAPY_SCRIPT, result_page_url])
+        data = self.read_data_from_data_file()
+        print(data)
+        tracker = Tracker(user=user, result_page_url=result_page_url, listings=data)
         tracker.save()
+        # send initial email with current listings
+
         
+    @staticmethod
+    def read_data_from_data_file():
+        df = pd.read_csv(DATA_FILE)
+        # http://pandas.pydata.org/pandas-docs/stable/missing_data.html#filling-missing-values-fillna
+        df = df.fillna('')
+        # http://stackoverflow.com/questions/26716616/convert-pandas-dataframe-to-dictionary
+        df.set_index('craig_id', drop=True, inplace=True)
+        return df.to_dict(orient='index')
+            
 
 
     def tracker_does_not_already_exist(self):
