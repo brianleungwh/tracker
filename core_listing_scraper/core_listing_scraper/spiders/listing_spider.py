@@ -6,12 +6,10 @@ from core_listing_scraper.items import CraigslistItem
 
 CRAIGSLIST_PAGINATION_LIMIT = 24
 
-TEST_URL = 'http://losangeles.craigslist.org/search/cta?query=135i&auto_transmission=1'
-
 class ListingSpider(scrapy.Spider):
     name = 'listing_spider'
 
-    def __init__(self, results_page_url=TEST_URL):
+    def __init__(self, results_page_url):
         super(ListingSpider, self).__init__()
         self.start_urls = self._build_start_urls(results_page_url)
         self.hostname = results_page_url.split('search')[0][:-1]
