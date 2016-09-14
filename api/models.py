@@ -9,5 +9,5 @@ class User(models.Model):
 
 class Tracker(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    result_page_url = models.URLField(max_length=500)
+    results_page_url = models.URLField(max_length=500)
     listings = JSONField()
