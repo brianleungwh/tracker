@@ -12,9 +12,12 @@ class UserTracker(APIView):
 
     def post(self, request):
         serializer = UserTrackerSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True) and serializer.tracker_does_not_already_exist():
-            serializer.create_tracker()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if serializer.is_valid(raise_exception=True):
+            if serializer.tracker_does_not_already_exist():
+                serializer.create_tracker()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 
     def delete(self, request):
