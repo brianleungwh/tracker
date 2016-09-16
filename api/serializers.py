@@ -5,6 +5,7 @@ from urlparse import urlparse
 from core_listing_scraper.utils import *
 from core_listing_scraper.spiders.listing_spider import ListingSpider
 from core_listing_scraper.pipelines import DATA_FILE
+from email_services.email_utils import send_confirmation_message
 
 import subprocess
 import pandas as pd
@@ -47,6 +48,7 @@ class UserTrackerSerializer(serializers.Serializer):
         tracker = Tracker(user=user, results_page_url=results_page_url, listings=data)
         tracker.save()
         # send initial email with current listings
+        send_confirmation_message(email)
 
         
     @staticmethod
