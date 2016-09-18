@@ -48,7 +48,7 @@ class UserTrackerSerializer(serializers.Serializer):
         tracker = Tracker(user=user, results_page_url=results_page_url, listings=data)
         tracker.save()
         # send initial email with current listings
-        send_confirmation_message(email)
+        send_confirmation_message(email, results_page_url, data)
 
         
     @staticmethod
