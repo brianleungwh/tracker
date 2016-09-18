@@ -28,4 +28,4 @@ class CoreListingScraperPipeline(object):
 
     def close_spider(self, spider):
         df = pd.DataFrame(self.data)
-        df.to_csv(DATA_FILE, index=False)
+        df.to_csv(DATA_FILE, index=False, encoding='utf-8')
