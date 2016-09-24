@@ -5,10 +5,11 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-import pandas as pd
+import json
 from core_listing_scraper.items import CraigslistItem
 
-DATA_FILE = 'data.csv'
+import redis
+r = redis.StrictRedis(host='redis', port=6379, db=0)
 
 class CoreListingScraperPipeline(object):
 
@@ -27,5 +28,4 @@ class CoreListingScraperPipeline(object):
         return item
 
     def close_spider(self, spider):
-        df = pd.DataFrame(self.data)
-        df.to_csv(DATA_FILE, index=False, encoding='utf-8')
+        r.set(spider.results_page_url, json.dumps(self.data, encoding='utf-8'))

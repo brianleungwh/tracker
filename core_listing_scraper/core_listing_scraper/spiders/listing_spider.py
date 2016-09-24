@@ -11,6 +11,7 @@ class ListingSpider(scrapy.Spider):
 
     def __init__(self, results_page_url):
         super(ListingSpider, self).__init__()
+        self.results_page_url = results_page_url
         self.start_urls = self._build_start_urls(results_page_url)
         self.hostname = results_page_url.split('search')[0][:-1]
         
