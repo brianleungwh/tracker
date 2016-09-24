@@ -4,14 +4,16 @@ from urlparse import urlparse
 
 from core_listing_scraper.utils import *
 from core_listing_scraper.spiders.listing_spider import ListingSpider
-from core_listing_scraper.pipelines import DATA_FILE
 from email_services.email_utils import send_confirmation_message
 
+import json
 import subprocess
-import pandas as pd
+
+import redis
+r = redis.StrictRedis(host='redis', port=6379, db=0)
 
 PYTHON = 'python'
-MAIN_SCRAPY_SCRIPT = 'core_listing_scraper/scrape_to_file.py'
+MAIN_SCRAPY_SCRIPT = 'core_listing_scraper/initiate_spider.py'
 
 class UserTrackerSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -43,8 +45,7 @@ class UserTrackerSerializer(serializers.Serializer):
         user, created = User.objects.get_or_create(email=email)
         user.save()
         subprocess.call([PYTHON, MAIN_SCRAPY_SCRIPT, results_page_url])
-        data = self.read_data_from_data_file()
-        print(data)
+        data = self.read_data(results_page_url)
         tracker = Tracker(user=user, results_page_url=results_page_url, listings=data)
         tracker.save()
         # send initial email with current listings
@@ -52,15 +53,17 @@ class UserTrackerSerializer(serializers.Serializer):
 
         
     @staticmethod
-    def read_data_from_data_file():
-        df = pd.read_csv(DATA_FILE)
-        # http://pandas.pydata.org/pandas-docs/stable/missing_data.html#filling-missing-values-fillna
-        df = df.fillna('')
-        # http://stackoverflow.com/questions/26716616/convert-pandas-dataframe-to-dictionary
-        df.set_index('craig_id', drop=True, inplace=True)
-        return df.to_dict(orient='index')
-            
-
+    def read_data(results_page_url):
+        data = {}
+        listings = json.loads(r.get(results_page_url), encoding='utf-8')
+        for listing in listings:
+            data[listing['craig_id']] = {
+                'title': listing['title'],
+                'price': listing['price'],
+                'absolute_url': listing['absolute_url'],
+                'last_modified_at': listing['last_modified_at']
+            }
+        return data
 
     def tracker_does_not_already_exist(self):
         email, results_page_url = self.extract_validated_data()

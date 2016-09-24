@@ -8,5 +8,6 @@ pandas==0.18.1
 psycopg2==2.6.1
 PyDispatcher==2.0.5
 scrapy===1.1.0
+redis==2.10.5
 requests==2.11.1
 django-cron==0.4.6
