@@ -9,3 +9,4 @@ PyDispatcher==2.0.5
 scrapy===1.1.0
 redis==2.10.5
 requests==2.11.1
+celery==3.1.23
