@@ -16,7 +16,9 @@ services:
      - "6379:6379"
   celery:
     build: .
-    command: celery -A tracker beat -l info
+    command: celery -A tracker worker -B -l info
+    volumes:
+      - .:/code
     links:
      - db
      - redis

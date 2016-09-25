@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 from sys import path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -129,6 +130,17 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+
+CELERYBEAT_SCHEDULE = {
+    'update-trackers': {
+        'task': 'api.update_trackers',
+        'schedule': crontab(minute='*/1'),
+    },
+}
 
 
 # Static files (CSS, JavaScript, Images)
