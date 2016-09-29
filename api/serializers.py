@@ -1,19 +1,9 @@
 from rest_framework import serializers
 from api.models import User, Tracker
 from urlparse import urlparse
-
-from core_listing_scraper.utils import *
-from core_listing_scraper.spiders.listing_spider import ListingSpider
 from email_services.email_utils import send_confirmation_message
+from core_listing_scraper import get_current_listings
 
-import json
-import subprocess
-
-import redis
-r = redis.StrictRedis(host='redis', port=6379, db=0)
-
-PYTHON = 'python'
-MAIN_SCRAPY_SCRIPT = 'core_listing_scraper/initiate_spider.py'
 
 class UserTrackerSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -44,26 +34,12 @@ class UserTrackerSerializer(serializers.Serializer):
         email, results_page_url = self.extract_validated_data()
         user, created = User.objects.get_or_create(email=email)
         user.save()
-        subprocess.call([PYTHON, MAIN_SCRAPY_SCRIPT, results_page_url])
-        data = self.read_data(results_page_url)
+        data = get_current_listings(results_page_url)
         tracker = Tracker(user=user, results_page_url=results_page_url, listings=data)
         tracker.save()
         # send initial email with current listings
         send_confirmation_message(email, results_page_url, data)
 
-        
-    @staticmethod
-    def read_data(results_page_url):
-        data = {}
-        listings = json.loads(r.get(results_page_url), encoding='utf-8')
-        for listing in listings:
-            data[listing['craig_id']] = {
-                'title': listing['title'],
-                'price': listing['price'],
-                'absolute_url': listing['absolute_url'],
-                'last_modified_at': listing['last_modified_at']
-            }
-        return data
 
     def tracker_does_not_already_exist(self):
         email, results_page_url = self.extract_validated_data()
