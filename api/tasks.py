@@ -59,14 +59,14 @@ def get_new_or_updated_listings(outdated_listings, current_listings):
 
         outdated_listing = outdated_listings.get(craig_id)
 
-        if listing_has_been_updated(outdated_listing, current_listing):
+        if listing_did_not_exist(outdated_listing):
             new_or_updated_listings[current_listing['craig_id']] = {
                 'title': current_listing['title'],
                 'price': current_listing['price'],
                 'absolute_url': current_listing['absolute_url'],
                 'last_modified_at': current_listing['last_modified_at']
             }
-        elif listing_did_not_exist(outdated_listing):
+        elif listing_has_been_updated(outdated_listing, current_listing):
             new_or_updated_listings[current_listing['craig_id']] = {
                 'title': current_listing['title'],
                 'price': current_listing['price'],
