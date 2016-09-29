@@ -4,10 +4,9 @@ django-rest-swagger==0.3.7
 django-extensions==1.6.7
 ipdb==0.10.1
 ipython==5.0.0
-pandas==0.18.1
 psycopg2==2.6.1
 PyDispatcher==2.0.5
 scrapy===1.1.0
 redis==2.10.5
 requests==2.11.1
-django-cron==0.4.6
+celery==3.1.23
