@@ -2,7 +2,7 @@ from rest_framework import serializers
 from api.models import User, Tracker
 from urllib import urlencode
 from urlparse import urlparse, urlunparse, parse_qs
-from email_services.email_utils import send_confirmation_message
+from mailgun_email_api.mailgun_email_api import send_confirmation_message
 from core_listing_scraper import get_current_listings
 
 
@@ -29,6 +29,7 @@ class UserTrackerSerializer(serializers.Serializer):
 
     @staticmethod
     def remove_pagination_query_if_exists(results_page_url):
+        # http://stackoverflow.com/questions/7734569/how-do-i-remove-a-query-string-from-url-using-python
         u = urlparse(results_page_url)
         query = parse_qs(u.query)
         if 's' not in query:

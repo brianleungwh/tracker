@@ -1,7 +1,8 @@
 from tracker import celery_app
 from api.models import User, Tracker
 from core_listing_scraper import get_current_listings
-from email_services.email_utils import send_email_for_new_or_updated_listings
+from mailgun_email_api.mailgun_email_api import send_email_for_new_or_updated_listings
+
 
 @celery_app.task(name='api.update_trackers')
 def update_trackers():
