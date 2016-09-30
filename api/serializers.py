@@ -35,7 +35,8 @@ class UserTrackerSerializer(serializers.Serializer):
             return results_page_url
 
         query.pop('s')
-        results_page_url = u._replace(query=urlencode(query, True))
+        u = u._replace(query=urlencode(query, True))
+        results_page_url = urlunparse(u)
         return results_page_url
 
     def extract_validated_data(self):

@@ -32,7 +32,6 @@ def send_email_for_new_or_updated_listings(user_email, results_page_url, new_or_
 def build_email_body_with(listings_data):
     l = []
     for listing_id, listing_data in listings_data.iteritems():
-        print(listing_data)
         title = ''
         price = ''
         url = ''
