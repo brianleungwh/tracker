@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from api.models import User, Tracker
-from urlparse import urlparse
+from urllib import urlencode
+from urlparse import urlparse, urlunparse, parse_qs
 from email_services.email_utils import send_confirmation_message
 from core_listing_scraper import get_current_listings
 
@@ -16,6 +17,7 @@ class UserTrackerSerializer(serializers.Serializer):
         # check this is in fact a craigslist result page url
         if not self._is_craigslist_url(results_page_url):
             raise serializers.ValidationError('Invalid URL')
+        results_page_url = self.remove_pagination_query_if_exists(results_page_url)
         return results_page_url
 
     @staticmethod
@@ -24,6 +26,18 @@ class UserTrackerSerializer(serializers.Serializer):
         return ((parsed_url.scheme == 'http' or parsed_url.scheme == 'https') and
                 parsed_url.netloc.split('.')[1] == 'craigslist' and 
                 parsed_url.path.split('/')[1] == 'search')
+
+    @staticmethod
+    def remove_pagination_query_if_exists(results_page_url):
+        u = urlparse(results_page_url)
+        query = parse_qs(u.query)
+        if 's' not in query:
+            return results_page_url
+
+        query.pop('s')
+        u = u._replace(query=urlencode(query, True))
+        results_page_url = urlunparse(u)
+        return results_page_url
 
     def extract_validated_data(self):
         email = self.validated_data['email']
