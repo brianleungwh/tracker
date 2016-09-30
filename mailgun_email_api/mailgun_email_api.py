@@ -1,10 +1,11 @@
 import requests
+from email_templates import *
 
 from tracker.keys.mailgun_keys import MAILGUN_API_KEY
 
 def send_confirmation_message(user_email, results_page_url, initial_listings):
     body = build_email_body_with(initial_listings)
-    msg = 'Hi! Here are the current listings for {results_page_url} \n\n{body}'.format(results_page_url=results_page_url, body=body)
+    msg = CONFIRMATION_MSG.format(results_page_url=results_page_url, body=body)
     return requests.post(
         'https://api.mailgun.net/v3/sandboxb7fd6d2e0f5d451fa9931e2d775cedc1.mailgun.org/messages',
         auth=('api', MAILGUN_API_KEY),
@@ -17,7 +18,7 @@ def send_confirmation_message(user_email, results_page_url, initial_listings):
 
 def send_email_for_new_or_updated_listings(user_email, results_page_url, new_or_updated_listings):
     body = build_email_body_with(new_or_updated_listings)
-    msg = 'Hi! Here are the updated listings for {results_page_url} \n\n{body}'.format(results_page_url=results_page_url, body=body)
+    msg = NEW_OR_UPDATED_LISTINGS_MSG.format(results_page_url=results_page_url, body=body)
     return requests.post(
         'https://api.mailgun.net/v3/sandboxb7fd6d2e0f5d451fa9931e2d775cedc1.mailgun.org/messages',
         auth=('api', MAILGUN_API_KEY),
