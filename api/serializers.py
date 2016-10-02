@@ -69,7 +69,7 @@ class UserTrackerSerializer(serializers.Serializer):
 
     def delete_tracker(self):
         if self.tracker_does_not_already_exist():
-            raise serializers.ValidationError('Cannot delete Track that does not exist')
+            raise serializers.ValidationError('Cannot delete Tracker that does not exist')
         email, results_page_url = self.extract_validated_data()
         user = User.objects.get(email=email)
         user.tracker_set.get(results_page_url=results_page_url).delete()
