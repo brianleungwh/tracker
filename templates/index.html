@@ -1,0 +1,79 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Tracker</title>
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    <script src="{% static "assets/libs/zepto.min.js" %}"></script>
+    <script src="{% static "assets/libs/deferred.js" %}"></script>
+    <script src="{% static "assets/libs/callbacks.js" %}"></script>
+    <script src="{% static "js/app.js" %}"></script>
+  </head>
+
+  <body>
+    <div class="form">
+      
+      <ul class="tab-group">
+        <li class="tab active"><a href="#create">Create a Tracker</a></li>
+        <li class="tab"><a href="#delete">Delete a Tracker</a></li>
+      </ul>
+      
+      <div class="tab-content">
+
+        <div id="create">
+          
+          <form id="create">
+
+          <div class="field-wrap">
+            <label>
+              Email Address
+            </label>
+            <input name="email" type="email" required autocomplete="off"/>
+          </div>
+          
+          <div class="field-wrap">
+            <label>
+              Craigslist Results Page URL
+            </label>
+            <input name="results_page_url" type="text" required autocomplete="off"/>
+          </div>
+          
+          <button id="create" type="submit" class="button button-block"/>Create</button>
+          
+          </form>
+
+        </div>
+        
+        <div id="delete">
+          
+          <form id="delete">
+          
+            <div class="field-wrap">
+            <label>
+              Email Address
+            </label>
+            <input name="email" type="email"required autocomplete="off"/>
+          </div>
+          
+          <div class="field-wrap">
+            <label>
+              Craigslist Results Page URL
+            </label>
+            <input name="results_page_url" type="text"required autocomplete="off"/>
+          </div>
+          
+          
+          <button id="delete" type="submit" class="button button-block"/>Delete</button>
+          
+          </form>
+
+        </div>
+        
+      </div><!-- tab-content -->
+      
+    </div> <!-- /form -->
+  </body>
+
+</html>
