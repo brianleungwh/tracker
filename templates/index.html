@@ -7,6 +7,8 @@
     <title>Tracker</title>
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
     <script src="{% static "assets/libs/zepto.min.js" %}"></script>
+    <script src="{% static "assets/libs/deferred.js" %}"></script>
+    <script src="{% static "assets/libs/callbacks.js" %}"></script>
     <script src="{% static "js/app.js" %}"></script>
   </head>
 
@@ -38,7 +40,7 @@
             <input name="results_page_url" type="text" required autocomplete="off"/>
           </div>
           
-          <button type="submit" class="button button-block"/>Create</button>
+          <button id="create" type="submit" class="button button-block"/>Create</button>
           
           </form>
 
@@ -52,18 +54,18 @@
             <label>
               Email Address
             </label>
-            <input type="email"required autocomplete="off"/>
+            <input name="email" type="email"required autocomplete="off"/>
           </div>
           
           <div class="field-wrap">
             <label>
               Craigslist Results Page URL
             </label>
-            <input type="text"required autocomplete="off"/>
+            <input name="results_page_url" type="text"required autocomplete="off"/>
           </div>
           
           
-          <button type="submit" class="button button-block"/>Delete</button>
+          <button id="delete" type="submit" class="button button-block"/>Delete</button>
           
           </form>
 

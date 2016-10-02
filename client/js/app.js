@@ -56,15 +56,47 @@ Zepto(function($) {
       'results_page_url': resultsPageUrl
     };
 
-    $.post('/api/1.0/user-tracker/', requestBody, function(res) {
-      console.log(res);
-    });
+    $('button#create').text('Processing current listings from URL. This could take up to 30 seconds.');
+
+    $.post('/api/1.0/user-tracker/', requestBody)
+      .done(function(data) {
+        alert('Tracker Created. A confirmation email is on its way!');
+      })
+      .fail(function(xhr, errorType, error) {
+        alert('Tracker may exist already! Or you have entered an invalid input. Please check.');
+      })
+      .always(function() {
+        $('button#create').text('Create');
+      });
 
   });
 
   $('form#delete').submit(function(e) {
     e.preventDefault();
-    console.log('delete submit detected');
+
+    var inputValues = $(this).serializeArray();
+    var userEmail = inputValues[0].value;
+    var resultsPageUrl = inputValues[1].value;
+
+    var requestBody = {
+      'email': userEmail,
+      'results_page_url': resultsPageUrl
+    };
+
+    $('button#delete').text('Processing Request...');
+
+    $.ajax({
+      type: 'DELETE',
+      url: '/api/1.0/user-tracker/',
+      data: requestBody,
+    }).done(function(data) {
+      alert('Tracker Deleted.');
+    }).fail(function(data) {
+      alert('Tracker does not exist! Or you entered invalid inputs. Please check.');
+    }).always(function() {
+      $('button#delete').text('Delete');
+    });
+
   });
 
 });
