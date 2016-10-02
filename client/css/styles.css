@@ -11,6 +11,16 @@ body {
   font-family: 'Titillium Web', sans-serif;
 }
 
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body, body {
+  display: flex;
+}
+
 a {
   text-decoration: none;
   color: #1ab188;
@@ -24,8 +34,9 @@ a:hover {
 .form {
   background: rgba(19, 35, 47, 0.9);
   padding: 40px;
-  max-width: 800px;
-  margin: 40px auto;
+  max-width: 1000px;
+  width: 1000px;
+  margin: auto;
   border-radius: 4px;
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
 }
