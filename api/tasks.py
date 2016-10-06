@@ -1,6 +1,6 @@
 from tracker import celery_app
 from api.models import User, Tracker
-from core_listing_scraper import get_current_listings
+from core_listing_scraper import get_current_listings, make_dict
 from mailgun_email_api.mailgun_email_api import send_email_for_new_or_updated_listings
 
 
@@ -40,24 +40,19 @@ def get_new_or_updated_listings(outdated_listings, current_listings):
         outdated_listing = outdated_listings.get(craig_id)
 
         if listing_did_not_exist(outdated_listing):
-            new_or_updated_listings[current_listing['craig_id']] = {
-                'title': current_listing['title'],
-                'price': current_listing['price'],
-                'absolute_url': current_listing['absolute_url'],
-                'last_modified_at': current_listing['last_modified_at']
-            }
+
+            new_or_updated_listings[craig_id] = make_dict(current_listing)
+
         elif listing_has_been_updated(outdated_listing, current_listing):
-            new_or_updated_listings[current_listing['craig_id']] = {
-                'title': current_listing['title'],
-                'price': current_listing['price'],
-                'absolute_url': current_listing['absolute_url'],
-                'last_modified_at': current_listing['last_modified_at']
-            }
+
+            new_or_updated_listings[craig_id] = make_dict(current_listing)
+            
         else:
             # listing has not changed
             continue
 
     return new_or_updated_listings
+
 
 
 def listing_has_been_updated(outdated_listing, current_listing):

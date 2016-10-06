@@ -9,7 +9,7 @@ import json
 from core_listing_scraper.items import CraigslistItem
 
 import redis
-r = redis.StrictRedis(host='redis', port=6379, db=0)
+r = redis.StrictRedis(host='redis', port=6379, db=1)
 
 class CoreListingScraperPipeline(object):
 
