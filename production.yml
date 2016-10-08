@@ -1,0 +1,29 @@
+version: '2'
+services:
+
+  db:
+    env_file:
+      - ./tracker/env/production.env
+
+  celery:
+    env_file:
+      - ./tracker/env/production.env
+
+  web:
+    command: gunicorn tracker.wsgi --bind 0.0.0.0:8000
+    env_file:
+      - ./tracker/env/production.env
+
+  nginx:
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    links:
+      - web
+    volumes_from:
+      - web
+
+volumes:
+  pgdata:
+    driver: local

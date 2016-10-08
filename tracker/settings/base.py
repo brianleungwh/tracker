@@ -138,7 +138,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERYBEAT_SCHEDULE = {
     'update-trackers': {
         'task': 'api.update_trackers',
-        'schedule': crontab(minute='*/1'),
+        'schedule': crontab(minute='*/60'),
     },
 }
 
