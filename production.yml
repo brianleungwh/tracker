@@ -2,15 +2,41 @@ version: '2'
 services:
 
   db:
+    restart: always
+    image: postgres:9.5.2
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
     env_file:
       - ./tracker/env/production.env
 
+  redis:
+    restart: always
+    image: redis:3.2.1
+    ports:
+     - "6379:6379"
+
   celery:
+    build: .
+    command: celery -A tracker worker -B -l info
+    links:
+      - db
+      - redis
+    restart: always
     env_file:
       - ./tracker/env/production.env
 
   web:
+    build: .
     command: gunicorn tracker.wsgi --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - /code/static
+    links:
+      - db
+      - redis
     env_file:
       - ./tracker/env/production.env
 
