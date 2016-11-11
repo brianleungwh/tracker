@@ -1,9 +1,8 @@
 from rest_framework import serializers
 from api.models import User, Tracker
+from api.tasks import create_tracker
 from urllib import urlencode
 from urlparse import urlparse, urlunparse, parse_qs
-from mailgun_email_api.mailgun_email_api import send_confirmation_message
-from core_listing_scraper import get_current_listings
 
 
 class UserTrackerSerializer(serializers.Serializer):
@@ -47,14 +46,7 @@ class UserTrackerSerializer(serializers.Serializer):
 
     def create_tracker(self):
         email, results_page_url = self.extract_validated_data()
-        user, created = User.objects.get_or_create(email=email)
-        user.save()
-        data = get_current_listings(results_page_url)
-        tracker = Tracker(user=user, results_page_url=results_page_url, listings=data)
-        tracker.save()
-        # send initial email with current listings
-        send_confirmation_message(email, results_page_url, data)
-
+        create_tracker.delay(email, results_page_url)
 
     def tracker_does_not_already_exist(self):
         email, results_page_url = self.extract_validated_data()
