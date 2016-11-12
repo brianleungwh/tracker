@@ -9,7 +9,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
     env_file:
-      - ./tracker/env/development.env
+      - ./env_files/development.env
 
   redis:
     restart: always
@@ -27,11 +27,11 @@ services:
       - redis
     restart: always
     env_file:
-      - ./tracker/env/development.env
+      - ./env_files/development.env
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000 --settings=tracker.settings.dev
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
@@ -40,7 +40,7 @@ services:
       - db
       - redis
     env_file:
-      - ./tracker/env/development.env
+      - ./env_files/development.env
 
 volumes:
   pgdata:

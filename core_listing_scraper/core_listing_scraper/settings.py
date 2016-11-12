@@ -74,7 +74,7 @@ ITEM_PIPELINES = {
 # https://github.com/erroneousboat/docker-django
 import sys, os
 sys.path.append('/code/') # path in the docker env
-os.environ['DJANGO_SETTINGS_MODULE'] = 'tracker.settings.base'
+# os.environ['DJANGO_SETTINGS_MODULE'] = 'tracker.settings'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
