@@ -29,7 +29,7 @@ services:
 
   web:
     build: .
-    command: gunicorn tracker.wsgi --bind 0.0.0.0:8000
+    entrypoint: /code/run_server_production.sh
     ports:
       - "8000:8000"
     volumes:

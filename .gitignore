@@ -1,5 +1,5 @@
 *.pyc
 keys/
 celerybeat-schedule
-tracker/env/
+env_files
 /static
