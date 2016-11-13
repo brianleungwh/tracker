@@ -1,7 +1,7 @@
 from base import *
 
 DEBUG = False
-ALLOWED_HOSTS = ['camdog.pro', '*']
+ALLOWED_HOSTS = ['.camdog.pro']
 # SESSION_COOKIE_HTTPONLY = False
 # CSRF_COOKIE_HTTPONLY = False
 
