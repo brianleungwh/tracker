@@ -29,7 +29,7 @@ services:
 
   web:
     build: .
-    entrypoint: /code/run_server_production.sh
+    command: ./run_server_production.sh
     ports:
       - "8000:8000"
     volumes:
