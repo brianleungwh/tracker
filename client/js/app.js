@@ -56,11 +56,11 @@ Zepto(function($) {
       'results_page_url': resultsPageUrl
     };
 
-    $('button#create').text('Processing current listings from URL. This could take up to 30 seconds.');
+    $('button#create').text('Done!');
 
     $.post('/api/1.0/user-tracker/', requestBody)
       .done(function(data) {
-        alert('Tracker Created. A confirmation email is on its way!');
+        alert('Tracker Created. A confirmation email will be on its way!');
       })
       .fail(function(xhr, errorType, error) {
         alert('Tracker may exist already! Or you have entered an invalid input. Please check.');
@@ -83,7 +83,7 @@ Zepto(function($) {
       'results_page_url': resultsPageUrl
     };
 
-    $('button#delete').text('Processing Request...');
+    $('button#delete').text('Done!');
 
     $.ajax({
       type: 'DELETE',
