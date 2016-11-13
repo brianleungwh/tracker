@@ -138,7 +138,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERYBEAT_SCHEDULE = {
     'update-trackers': {
         'task': 'api.update_trackers',
-        'schedule': crontab(minute='*/1'),
+        'schedule': crontab(minute='*/60'),
     },
 }
 
@@ -151,3 +151,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "client"),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")

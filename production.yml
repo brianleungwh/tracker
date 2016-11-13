@@ -9,7 +9,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
     env_file:
-      - ./env_files/development.env
+      - ./env_files/production.env
 
   redis:
     restart: always
@@ -20,27 +20,35 @@ services:
   celery:
     build: .
     command: celery -A tracker worker -B -l info
-    volumes:
-      - .:/code
     links:
       - db
       - redis
     restart: always
     env_file:
-      - ./env_files/development.env
+      - ./env_files/production.env
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
+    entrypoint: /code/run_server_production.sh
     ports:
       - "8000:8000"
+    volumes:
+      - /code/static
     links:
       - db
       - redis
     env_file:
-      - ./env_files/development.env
+      - ./env_files/production.env
+
+  nginx:
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    links:
+      - web
+    volumes_from:
+      - web
 
 volumes:
   pgdata:

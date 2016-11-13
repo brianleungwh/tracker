@@ -29,7 +29,7 @@ class ListingSpider(scrapy.Spider):
         return urls
 
     def parse(self, response):
-        listings = response.xpath(".//p")
+        listings = response.xpath(".//ul[@class='rows']/li")
         # . selects the current node
         # // elects nodes in the document from the current node that match the selection no matter where they are
         for listing in listings:
@@ -45,9 +45,7 @@ class ListingSpider(scrapy.Spider):
         item['craig_id'] = listing.xpath("@data-pid").extract_first()
         a_href_link = listing.xpath("a/@href").extract_first()
         item['absolute_url'] = self.get_absolute_url(response, a_href_link)
-        listing_info = listing.xpath("span[@class='txt']")
-        item['last_modified_at'] = listing_info.xpath("span[@class='pl']/time/@datetime").extract_first()
-        title_tag = listing_info.xpath("span[@class='pl']/a")
-        item['title'] = title_tag.xpath("text()").extract_first()
-        price_tag = listing_info.xpath("span[@class='l2']/span[@class='price']")
-        item['price'] = price_tag.xpath("text()").extract_first()
+        listing_info = listing.xpath("p[@class='result-info']")
+        item['last_modified_at'] = listing_info.xpath("time[@class='result-date']/@datetime").extract_first()
+        item['title'] = listing_info.xpath("a[@class='result-title hdrlnk']/text()").extract_first()
+        item['price'] = listing_info.xpath("span[@class='result-meta']/span[@class='result-price']/text()").extract_first()
