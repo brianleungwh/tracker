@@ -7,12 +7,12 @@ def send_confirmation_message(user_email, results_page_url, initial_listings):
     body = build_email_body_with(initial_listings)
     msg = CONFIRMATION_MSG.format(results_page_url=results_page_url, body=body)
     return requests.post(
-        'https://api.mailgun.net/v3/sandboxb7fd6d2e0f5d451fa9931e2d775cedc1.mailgun.org/messages',
+        'https://api.mailgun.net/v3/tracking.camdog.pro/messages',
         auth=('api', MAILGUN_API_KEY),
         data={
-            'from': 'Mailgun Sandbox <postmaster@sandboxb7fd6d2e0f5d451fa9931e2d775cedc1.mailgun.org>',
+            'from': 'CamDog <mailgun@tracking.camdog.pro>',
             'to': user_email,
-            'subject': 'Tracker Created!',
+            'subject': 'Tracking Initiated For {url}'.format(url=results_page_url),
             'text': msg
         })
 
@@ -20,12 +20,12 @@ def send_email_for_new_or_updated_listings(user_email, results_page_url, new_or_
     body = build_email_body_with(new_or_updated_listings)
     msg = NEW_OR_UPDATED_LISTINGS_MSG.format(results_page_url=results_page_url, body=body)
     return requests.post(
-        'https://api.mailgun.net/v3/sandboxb7fd6d2e0f5d451fa9931e2d775cedc1.mailgun.org/messages',
+        'https://api.mailgun.net/v3/tracking.camdog.pro/messages',
         auth=('api', MAILGUN_API_KEY),
         data={
-            'from': 'Mailgun Sandbox <postmaster@sandboxb7fd6d2e0f5d451fa9931e2d775cedc1.mailgun.org>',
+            'from': 'CamDog <mailgun@tracking.camdog.pro>',
             'to': user_email,
-            'subject': 'Newly Created or Updated Listings',
+            'subject': 'New or Updated Listings Found For {url}'.format(url=results_page_url),
             'text': msg
         })
 
