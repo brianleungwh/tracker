@@ -12,7 +12,7 @@ def get_current_listings(results_page_url):
     data = {}
     listings = json.loads(r.get(results_page_url), encoding='utf-8')
     for listing in listings:
-            data[listing['craig_id']] = make_dict(listing)
+        data[listing['craig_id']] = make_dict(listing)
     return data
 
 def make_dict(listing):
