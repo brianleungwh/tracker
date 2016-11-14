@@ -1,5 +1,9 @@
 from base import *
 
+
+MAILGUN_API_ENDPOINT = 'https://api.mailgun.net/v3/tracking.camdog.pro/messages'
+MAILGUN_DISPLAY_NAME = 'CamDog <mailgun@tracking.camdog.pro>'
+
 DEBUG = False
 ALLOWED_HOSTS = ['.camdog.pro']
 # SESSION_COOKIE_HTTPONLY = False
