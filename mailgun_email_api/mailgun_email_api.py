@@ -1,16 +1,20 @@
 import requests
 from email_templates import *
 
+from django.conf import settings
 from tracker.keys.mailgun_keys import MAILGUN_API_KEY
 
 def send_confirmation_message(user_email, results_page_url, initial_listings):
     body = build_email_body_with(initial_listings)
     msg = CONFIRMATION_MSG.format(results_page_url=results_page_url, body=body)
+    print('sending email')
+    print(settings.MAILGUN_API_ENDPOINT)
+    print(settings.MAILGUN_DISPLAY_NAME)
     return requests.post(
-        'https://api.mailgun.net/v3/tracking.camdog.pro/messages',
+        settings.MAILGUN_API_ENDPOINT,
         auth=('api', MAILGUN_API_KEY),
         data={
-            'from': 'CamDog <mailgun@tracking.camdog.pro>',
+            'from': settings.MAILGUN_DISPLAY_NAME,
             'to': user_email,
             'subject': 'Tracking Initiated For {url}'.format(url=results_page_url),
             'text': msg
@@ -20,10 +24,10 @@ def send_email_for_new_or_updated_listings(user_email, results_page_url, new_or_
     body = build_email_body_with(new_or_updated_listings)
     msg = NEW_OR_UPDATED_LISTINGS_MSG.format(results_page_url=results_page_url, body=body)
     return requests.post(
-        'https://api.mailgun.net/v3/tracking.camdog.pro/messages',
+        settings.MAILGUN_API_ENDPOINT,
         auth=('api', MAILGUN_API_KEY),
         data={
-            'from': 'CamDog <mailgun@tracking.camdog.pro>',
+            'from': settings.MAILGUN_DISPLAY_NAME,
             'to': user_email,
             'subject': 'New or Updated Listings Found For {url}'.format(url=results_page_url),
             'text': msg
